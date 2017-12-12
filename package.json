@@ -3,7 +3,11 @@
   "version": "1.0.0",
   "description": "Garaji web site",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "postinstall": "gulp",
+    "watch": "gulp watch",
+    "build": "gulp"
+  },
   "author": "",
   "license": "ISC",
   "dependencies": {
