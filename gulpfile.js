@@ -1,10 +1,14 @@
-// Load Node Modules/Plugins
 var gulp = require('gulp'),
 gulpLoadPlugins = require('gulp-load-plugins'),
 del = require('del'),
 gutil = require('gulp-util'),
 uglify = require('gulp-uglify'),
-rename = require('gulp-rename');
+rename = require('gulp-rename'),
+rev = require('gulp-rev'),
+collect = require('gulp-rev-collector'),
+revdel = require('gulp-rev-delete-original');
+
+require('dotenv').config();
 
 var $ = gulpLoadPlugins();
 
@@ -17,8 +21,9 @@ var paths = {
   fonts: [] 
 };
 
-// Remove existing dist build
-gulp.task('clean', del.bind(null, ['dist']));
+gulp.task('clean', () => {
+  return del(['public/dist/**', '!public/dist'], { force: true });
+});
 
 gulp.task('js:vendor', function () {
   return processJs(paths.scriptsVendor, 'vendor.js');
@@ -28,51 +33,53 @@ gulp.task('css:vendor', function() {
   return processCss(paths.cssVendor, 'vendor.css');
 });
 
-gulp.task('sass', function() {
-  return gulp.src(['public/*.scss'])
-    .pipe($.plumber())
-    .pipe($.sass().on('error', $.sass.logError))
-    .pipe($.autoprefixer({browsers: ['last 1 version']}))
-    .pipe($.minifyCss())
-    .pipe(gulp.dest(dest));
+gulp.task('sass:app', function() {
+  return processScss(['public/*.scss'], 'styles.css');
 });
 
-gulp.task('js', function() {
+gulp.task('js:app', function() {
   return processJs(['public/*.js'], 'index.js');
 });
 
+gulp.task('html', () => {
+  return gulp.src(['public/dist/rev-manifest.json', 'public/*.html'])
+    .pipe(collect())
+    .pipe(gulp.dest(dest))
+});
+
 gulp.task('config', function() {
-  var src = '';
-  if (process.argv.indexOf('--prod') > -1) {
-    console.log('using prod config...');
-    src = 'config/prod.js';
-  } else {
-    console.log('using qa config...');       
-    src = 'config/qa.js';        
-  }
-  return gulp.src([src])
+  console.log('using ' + process.env.NODE_ENV + ' config...');       
+  return gulp.src(['config/' + process.env.NODE_ENV + '.js'])
     .pipe(rename('config.js'))
-    .pipe(gulp.dest('public/dist'))
+    .pipe(gulp.dest(dest));
 });
 
-gulp.task('fonts', function() {
-  return gulp.src(['public/fonts/**/*.*'])
-    .pipe(gulp.dest('public/dist/fonts'));
+gulp.task('default', ['clean'], () => {
+  return gulp.start('compile');
 });
 
-// Watch tasks
 gulp.task('watch', function() {
-  gulp.start('config');
-  gulp.start('fonts');
-  gulp.watch('public/*.scss', ['sass']);
-  gulp.watch('public/*.js', ['js']);
+  gulp.watch(['public/assets/**', 'public/*.scss', 'public/*.js', 'public/*.html'], ['default']);
 });
 
-gulp.task('dist', ['sass', 'js:vendor', 'css:vendor', 'js', 'fonts']);
-
-gulp.task('default', ['clean', 'config'], () => {
-  gulp.start('dist');
+gulp.task('assets', () => {
+  return gulp.src(['public/assets/**/*.*'])
+    .pipe(gulp.dest('public/dist/assets'));
 });
+
+gulp.task('build', ['config', 'sass:app', 'js:vendor', 'css:vendor', 'js:app', 'assets'], () => {
+  return gulp.src(['public/dist/**/*.js', 'public/dist/**/*.css'])
+    .pipe(rev())
+    .pipe(revdel())
+    .pipe(gulp.dest(dest))
+    .pipe(rev.manifest())
+    .pipe(gulp.dest(dest));
+});
+
+gulp.task('compile', ['build'], () => {
+  gulp.start('html');
+});
+
 
 function processCss(srcGlob, destFileName, destFolder) {
   return gulp.src(srcGlob)
@@ -83,5 +90,14 @@ function processCss(srcGlob, destFileName, destFolder) {
 function processJs(srcGlob, destFileName, destFolder) {
   return gulp.src(srcGlob)
     .pipe($.concat(destFileName))
+    .pipe(gulp.dest(destFolder ? destFolder : dest));
+}
+
+function processScss(srcGlob, destFileName, destFolder) {
+  return gulp.src(srcGlob)
+    .pipe($.plumber())
+    .pipe($.sass().on('error', $.sass.logError))
+    .pipe($.autoprefixer({browsers: ['last 1 version']}))
+    .pipe($.minifyCss())
     .pipe(gulp.dest(destFolder ? destFolder : dest));
 }
