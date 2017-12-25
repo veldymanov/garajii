@@ -16,8 +16,12 @@ var dest = 'public/dist';
 var paths = {
   scriptsVendor: [
     'node_modules/vanilla-text-mask/dist/vanillaTextMask.js',    
+    'node_modules/jquery/dist/jquery.min.js',
+    'node_modules/toastr/build/toastr.min.js',
   ],
-  cssVendor: [],
+  cssVendor: [
+    'node_modules/toastr/build/toastr.min.css',
+  ],
   fonts: [] 
 };
 
@@ -90,6 +94,7 @@ function processCss(srcGlob, destFileName, destFolder) {
 function processJs(srcGlob, destFileName, destFolder) {
   return gulp.src(srcGlob)
     .pipe($.concat(destFileName))
+    .pipe(uglify())
     .pipe(gulp.dest(destFolder ? destFolder : dest));
 }
 
