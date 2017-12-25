@@ -44,8 +44,7 @@ var subscribe = $.throttle(500, true, function () {
 		data: JSON.stringify(payload)
 	})
 	.done(function (response) {
-		debugger;
-		toastr["success"]("Successfully signed up");
+		toastr["success"]("Thank you!");
 		form.children('input').blur();
 		form[0].reset();
 	})
