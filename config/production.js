@@ -1,3 +1,3 @@
 var appConfig = {
-  api: 'https://garaji-api-qa.azurewebsites.net'
+  api: 'https://garaji-api-prod.azurewebsites.net'
 };
