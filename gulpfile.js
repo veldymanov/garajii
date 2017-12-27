@@ -58,6 +58,11 @@ gulp.task('config', function() {
     .pipe(gulp.dest(dest));
 });
 
+gulp.task('web-config', function() {
+  return gulp.src(['public/web.config'])
+    .pipe(gulp.dest(dest));
+});
+
 gulp.task('default', ['clean'], () => {
   return gulp.start('compile');
 });
@@ -80,7 +85,7 @@ gulp.task('build', ['config', 'sass:app', 'js:vendor', 'css:vendor', 'js:app', '
     .pipe(gulp.dest(dest));
 });
 
-gulp.task('compile', ['build'], () => {
+gulp.task('compile', ['build', 'web-config'], () => {
   gulp.start('html');
 });
 
