@@ -175,12 +175,13 @@ body {
     justify-content: center;
   }
 
-  .logo-full {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    margin-left: auto;
-    margin-right: auto;
+  .logo {
+    align-self: center;
+    max-height: 90px;
+    margin-bottom: 4rem;
+
+    @media screen and (max-height: 730px) {
+      margin-bottom: 3rem;
+    }
   }
 }
