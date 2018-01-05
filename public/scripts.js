@@ -47,6 +47,7 @@ var subscribe = $.throttle(500, true, function () {
 		toastr["success"]("Thank you!");
 		form.children('input').blur();
 		form[0].reset();
+		window.open('./thank-you.html', '_self');
 	})
 	.fail(function (rejection) {
 		console.log(rejection);
