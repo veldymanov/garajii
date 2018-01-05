@@ -116,7 +116,8 @@ body {
     button.btn {
       color: #fff !important;
       text-decoration: none !important;
-      padding: 20px 40px;
+      padding: 20px 40px;    
+      cursor: pointer;
   
       &:hover {
         opacity: .5;
