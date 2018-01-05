@@ -44,7 +44,6 @@ var subscribe = $.throttle(500, true, function () {
 		data: JSON.stringify(payload)
 	})
 	.done(function (response) {
-		toastr["success"]("Thank you!");
 		form.children('input').blur();
 		form[0].reset();
 		window.open('./thank-you.html', '_self');
