@@ -1,113 +1,177 @@
-var gulp = require('gulp'),
-gulpLoadPlugins = require('gulp-load-plugins'),
-del = require('del'),
-gutil = require('gulp-util'),
-uglify = require('gulp-uglify'),
-rename = require('gulp-rename'),
-rev = require('gulp-rev'),
-collect = require('gulp-rev-collector'),
-revdel = require('gulp-rev-delete-original');
+const gulp = require('gulp');
+const  plumber = require('gulp-plumber');
+const  autoprefixer = require('gulp-autoprefixer');
+const  rename = require('gulp-rename');
 
-require('dotenv').config();
+const  urlAdjuster = require('gulp-css-url-adjuster');
+const  inline = require('gulp-inline');
+const  htmlmin = require('gulp-htmlmin');
+const  sass = require('gulp-sass');
+const  cleanCSS = require('gulp-clean-css');
+const  babel = require('gulp-babel');
+const  uglify = require('gulp-uglify');
+const  webp = require('gulp-webp');
+const  imagemin = require('gulp-imagemin');
 
-var $ = gulpLoadPlugins();
+const  browserSync = require('browser-sync');
+const  del = require('del');
 
-var dest = 'public/dist';
-var paths = {
-  scriptsVendor: [
-    'node_modules/vanilla-text-mask/dist/vanillaTextMask.js',    
-    'node_modules/jquery/dist/jquery.min.js',
-    'node_modules/toastr/build/toastr.min.js',
-  ],
-  cssVendor: [
-    'node_modules/toastr/build/toastr.min.css',
-  ],
-  fonts: [] 
-};
 
-gulp.task('clean', () => {
-  return del(['public/dist/**', '!public/dist'], { force: true });
+/**
+* CSS Tasks
+*/
+//run sass
+gulp.task('sass', () =>
+  gulp.src('src/**/*.scss')
+    .pipe(plumber())
+    .pipe(sass().on('error', sass.logError))
+    .pipe(gulp.dest('src/'))
+);
+
+/**
+* Picture tasks
+*/
+//pctures minimize to '*.opt.{png,jpg,gif,svg}' and '*.z.{png,jpg,gif,svg}'
+gulp.task('pic:min', () =>
+  gulp.src([
+    'src/**/images/**/*.{png,jpg,gif,svg}',
+    '!src/**/images/**/*.opt.{png,jpg,gif,svg}',
+    '!src/**/images/**/*.z.{png,jpg,gif,svg}'
+  ])
+    .pipe(rename({suffix: '.opt'}))
+    .pipe(imagemin())
+    .pipe(gulp.dest('src/'))
+    .pipe(rename(function(opt) {
+        opt.basename = opt.basename.replace(/.opt/, '.z');
+    }))
+    .pipe(gulp.dest('src/'))
+);
+
+//create '*.z.webp' from '*.opt.{png,jpg}'
+gulp.task('pic:webp', ['pic:min'], () =>
+  gulp.src(['src/**/images/**/*.opt.{jpg,png}'])
+    .pipe(rename(function(opt) {
+        opt.basename = opt.basename.replace(/.opt/, '.z');
+    }))
+    .pipe(webp())
+    .pipe(gulp.dest('src/'))
+);
+
+//remove all pictures exept 'src/images/**/*.z.{png,jpg,gif,svg}'
+gulp.task('pic:remove', ['pic:webp'], () =>
+  del.sync([
+    'src/**/images/**/*.{png,jpg,gif,svg}',
+    '!src/**/images/**/*.z.{png,jpg,gif,svg}'
+  ])
+);
+
+gulp.task('pic', ['pic:remove']);
+
+/**
+* Build production version
+*/
+//clear out all files and folders from build folder
+gulp.task('build:cleanfolder', () =>
+  del.sync('dist/**')
+);
+
+//task to create build directory for all files
+gulp.task('build:copy', ['build:cleanfolder'], () =>
+  gulp.src('src/**/*/')
+    .pipe(gulp.dest('dist/'))
+);
+
+// change urls in css files
+gulp.task('url:adjust', ['build:copy'], () =>
+  gulp.src('dist/styles/*.css')
+    .pipe(urlAdjuster({
+      replace:  ['../',''], // for github pages: "replace:  ['../','']"
+    }))
+    .pipe(gulp.dest('dist/styles/'))
+);
+
+//minify scripts
+gulp.task('scripts:minify', ['url:adjust'], () =>
+  gulp.src(['dist/**/*.js', '!dist/**/chat-socket.js'])
+  .pipe(plumber())
+  .pipe(babel({
+    presets: ['@babel/env']
+  }))
+  .pipe(uglify())
+  .pipe(gulp.dest('dist/'))
+);
+
+// inline css, js, svg
+gulp.task('inline', ['scripts:minify'], () =>
+  gulp.src('dist/*.html')
+  .pipe(inline({
+    base: 'dist',
+    // js: uglify,
+    css: [cleanCSS],
+    disabledTypes: ['img', 'svg'], // Only inline css, js files
+    // ignore: ['./css/do-not-inline-me.css']
+  }))
+  .pipe(gulp.dest('dist/'))
+);
+
+//minify html
+gulp.task('html:minify', ['inline'], () =>
+  gulp.src(['dist/**/*.html'])
+  .pipe(plumber())
+  .pipe(htmlmin({
+    collapseBooleanAttributes: true,
+    collapseWhitespace: true,
+    decodeEntities: true,
+    html5: true,
+    minifyCSS: false,
+    minifyJS: false,
+    processConditionalComments: true,
+    minifyURLs: true,
+    removeAttributeQuotes: true,
+    removeComments: true,
+    removeEmptyAttributes: true,
+    removeRedundantAttributes: true,
+    removeScriptTypeAttributes: true
+  }))
+  .pipe(gulp.dest('dist/'))
+);
+
+//task to remove unwanted build files
+gulp.task('build:remove', ['html:minify'], () =>
+  del.sync([
+    'dist/styles/**', 'dist/scripts/**'])
+);
+
+gulp.task('build', ['build:remove']);
+
+/**
+* Browser-Sync Tasks
+*/
+gulp.task('serve', () =>
+  browserSync({
+    server: {
+      baseDir: './src/'
+    }
+  })
+);
+
+//task to run build server
+gulp.task('build:serve', () =>
+  browserSync({
+    server: {
+      baseDir: './dist/'
+    }
+  })
+);
+
+gulp.task('watch', () => {
+  gulp.watch('src/**/*.html').on('change', browserSync.reload);
+  gulp.watch('src/**/*.scss', ['sass']).on('change', browserSync.reload);
+  // gulp.watch('src/**/*.css', ['css']).on('change', browserSync.reload);
+  gulp.watch('src/**/*.js').on('change', browserSync.reload);
 });
 
-gulp.task('js:vendor', function () {
-  return processJs(paths.scriptsVendor, 'vendor.js');
-});
-
-gulp.task('css:vendor', function() {
-  return processCss(paths.cssVendor, 'vendor.css');
-});
-
-gulp.task('sass:app', function() {
-  return processScss(['public/*.scss'], 'styles.css');
-});
-
-gulp.task('js:app', function() {
-  return processJs(['public/*.js'], 'index.js');
-});
-
-gulp.task('html', () => {
-  return gulp.src(['public/dist/rev-manifest.json', 'public/*.html'])
-    .pipe(collect())
-    .pipe(gulp.dest(dest))
-});
-
-gulp.task('config', function() {
-  console.log('using ' + process.env.NODE_ENV + ' config...');       
-  return gulp.src(['config/' + process.env.NODE_ENV + '.js'])
-    .pipe(rename('config.js'))
-    .pipe(gulp.dest(dest));
-});
-
-gulp.task('web-config', function() {
-  return gulp.src(['public/web.config'])
-    .pipe(gulp.dest(dest));
-});
-
-gulp.task('default', ['clean'], () => {
-  return gulp.start('compile');
-});
-
-gulp.task('watch', function() {
-  gulp.watch(['public/assets/**', 'public/*.scss', 'public/*.js', 'public/*.html'], ['default']);
-});
-
-gulp.task('assets', () => {
-  return gulp.src(['public/assets/**/*.*'])
-    .pipe(gulp.dest('public/dist/assets'));
-});
-
-gulp.task('build', ['config', 'sass:app', 'js:vendor', 'css:vendor', 'js:app', 'assets'], () => {
-  return gulp.src(['public/dist/**/*.js', 'public/dist/**/*.css'])
-    .pipe(rev())
-    .pipe(revdel())
-    .pipe(gulp.dest(dest))
-    .pipe(rev.manifest())
-    .pipe(gulp.dest(dest));
-});
-
-gulp.task('compile', ['build', 'web-config'], () => {
-  gulp.start('html');
-});
-
-
-function processCss(srcGlob, destFileName, destFolder) {
-  return gulp.src(srcGlob)
-    .pipe($.concat(destFileName))
-    .pipe(gulp.dest(destFolder ? destFolder : dest));
-}
-
-function processJs(srcGlob, destFileName, destFolder) {
-  return gulp.src(srcGlob)
-    .pipe($.concat(destFileName))
-    .pipe(uglify())
-    .pipe(gulp.dest(destFolder ? destFolder : dest));
-}
-
-function processScss(srcGlob, destFileName, destFolder) {
-  return gulp.src(srcGlob)
-    .pipe($.plumber())
-    .pipe($.sass().on('error', $.sass.logError))
-    .pipe($.autoprefixer({browsers: ['last 1 version']}))
-    .pipe($.minifyCss())
-    .pipe(gulp.dest(destFolder ? destFolder : dest));
-}
+gulp.task('default', [
+  'serve',
+  'watch'
+]);
