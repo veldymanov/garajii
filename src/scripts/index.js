@@ -1,1 +1,0 @@
-document.querySelector('#scr-check').innerHTML = 'Hello script 13';
