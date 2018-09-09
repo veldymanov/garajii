@@ -1,4 +1,9 @@
-@import 'variables';
+@import 'variables', 'general-styles';
+
+$head-nav-height: 75px;
+$nav-container-padding-left: 25px;
+$nav-box-width: 250px;
+$nav-box-min-height: 300px;
 
 .underline {
 	&::after {
@@ -28,7 +33,7 @@
   width: 0;
 
   &.active {
-    background-color: $fixed-panel-bc;
+    background-color: $scrolled-panel-bc;
     height: 100vh;
     width: 100vw;
   }
@@ -41,10 +46,12 @@
   font-family: 'Roboto';
   font-size: 14px;
   font-weight: 500;
+  height: $head-nav-height;
   left: 0;
   padding-left: 20px;
+  position: absolute;
   top: 0;
-  transition: background-color 0.4s, color 0.4s, top 0.4s;
+  transition: background-color 0.25s, color 0.25s, top 0.25s;
   width: 100%;
   z-index: 100;
 
@@ -66,7 +73,8 @@
 
   .logo-link {
     align-self: center;
-    height: 50px;
+    height: 100%;
+    padding: 10px 0;
 
     .logo {
       display: block;
@@ -78,27 +86,34 @@
   }
 
   .nav-container {
-    display: flex;
     flex-grow: 1;
-    justify-content: space-between;
+    height: 100%;
 
-    .action-buttons {
-      color: $color-white;
-      margin: 0;
-      padding: 0;
+    .nav-box {
+      display: flex;
+      height: 100%;
+      justify-content: space-between;
 
-      .action-btn {
-        align-items: center;
-        display: flex;
-        margin-right: 10px;
+      .action-buttons {
+        color: $color-white;
+        flex-wrap: wrap;
+        height: 100%;
+        margin: 0;
+        padding: 0;
 
-        &:last-child {
-          margin-right: 0;
-        }
-        &.download {
-          background-color: $color-orange;
-          color: $gray-700;
-          height: 100%;
+        .action-btn {
+          align-items: center;
+          display: flex;
+          margin-right: 10px;
+
+          &:last-child {
+            margin-right: 0;
+          }
+          &.download {
+            background-color: $color-orange;
+            color: $gray-700;
+            height: 100%;
+          }
         }
       }
     }
@@ -113,7 +128,7 @@
       cursor: pointer;
     }
     .line {
-      background-color: $gray-700;
+      background-color: $color-white;
       height: 4px;
       margin-bottom: 5px;
       margin-left: 5px;
@@ -128,73 +143,96 @@
   }
 }
 
-.head-nav.fixed {
-  background-color: $fixed-panel-bc;
-  color: $color-white;
-  position: fixed;
+// js scrollup/scrolldown
+.head-nav {
+  &.scrolled {
+    background-color: $scrolled-panel-bc;
+    color: $color-white;
+    top: 0;
+    position: fixed;
 
-  .underline:after {
-    background-color: $color-white;
-  }
-  .sandwich {
-    .line {
+    .underline:after {
       background-color: $color-white;
+    }
+    .sandwich {
+      .line {
+        background-color: $color-white;
+      }
+    }
+  }
+  &.hidden {
+    top: -$head-nav-height;
+  }
+}
+
+@media (min-width: 900px) {
+  .head-nav {
+    .nav-container {
+      height: 100% !important;
     }
   }
 }
 
 @media (max-width: 900px) {
   .head-nav {
-    padding: 20px;
+    padding: 0 20px;
+
+    .logo-link {
+      padding: 10px 0;
+    }
 
     .nav-container {
-      align-items: flex-start;
-      background-color: $gray-1200;
-      border-radius: 4px;
-      flex-direction: column;
-      min-height: 300px;
-      overflow: hidden;
-      position: absolute;
-      right: -250px;
+      background-color: transparent;
+      height: 100vh;
+      overflow: auto;
+      padding-left: $nav-container-padding-left;
+      position: fixed;
+      right: calc(#{-$nav-box-width} - 1px);
       top: 0;
-      width: 250px;
 
-      .nav-items {
-        align-items: flex-start;
-        flex-direction: column;
-        margin-top: 0;
-        padding: 0;
-        width: 100%;
+      .nav-box {
+        background-color: $gray-1200;
+        flex-wrap: wrap;
+        height: auto;
+        min-height: $nav-box-min-height;
+        width: $nav-box-width;
 
-        .nav-item {
-          width: 100%;
+        .nav-items {
+          flex: 1 0 100%;
+          flex-wrap: wrap;
+          height: 100%;
+          margin-top: 0;
+          padding: 0;
 
-          &:hover {
-            background-color: lighten($gray-1200, 10);
+          .nav-item {
+            flex: 1 0 100%;
+
+            &:hover {
+              background-color: lighten($gray-1200, 10);
+            }
+            .nav-link {
+              padding: 20px 20px;
+            }
+            .underline::after {
+              display: none;
+            }
           }
-          .nav-link {
-            padding: 20px 20px;
-          }
-          .underline::after {
-            display: none;
+
+        }
+        .action-buttons {
+          align-self: flex-end;
+          flex-wrap: wrap;
+          height: 100%;
+
+          .action-btn {
+            flex: 1 0 100%;
+            margin-right: 0;
+
+            a {
+              padding: 20px 20px;
+            }
           }
         }
-
-      }
-      .action-buttons {
-        align-items: flex-start;
-        flex-direction: column;
-        width: 100%;
-
-        .action-btn {
-          margin-right: 0;
-          width: 100%;
-
-          a {
-            padding: 20px 20px;
-          }
-        }
-
       }
     }
 

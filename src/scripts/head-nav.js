@@ -1,10 +1,39 @@
+const menuTransition = '0.4s';
+
 document.addEventListener("DOMContentLoaded",function() {
+  const headNavEl = document.querySelector('.js-head-nav');
+  const headNavElHeight = headNavEl.clientHeight;
+  let yOffsetPrev = 0;
+
+  window.addEventListener('scroll', function(){
+    const yOffset = window.pageYOffset;
+
+    if (yOffset <= 0) {
+      headNavEl.classList.remove('scrolled', 'hidden')
+    } else if (yOffset > headNavElHeight) {
+      yOffset < yOffsetPrev
+        ? (
+            headNavEl.classList.add('scrolled'),
+            headNavEl.classList.remove('hidden')
+          )
+        : (
+            headNavEl.classList.remove('scrolled'),
+            headNavEl.classList.add('hidden')
+          );
+    }
+
+    yOffsetPrev = yOffset;
+  });
+
+  window.addEventListener('resize', function(event){
+    if(window.innerWidth > 900 ) { menuSlideOut(event) }
+  });
+
   mobileMenuTouchSlider.createSlidePanel('#js-nav-container');
 
   document.querySelector('.js-sandwich').addEventListener('click', function(event) {
     menuSlideIn(event);
   });
-
   document.querySelector('.js-cover').addEventListener('click', function(event) {
     menuSlideOut(event);
   });
@@ -19,7 +48,7 @@ const mobileMenuTouchSlider = {
 
 	createSlidePanel: function(/*selector*/ panelId) {
     const elem = document.querySelector(panelId);
-    this.width = elem.clientWidth;;
+    this.width = elem.clientWidth;
     this.makeTouchable(elem);
 	},
 
@@ -69,8 +98,8 @@ const mobileMenuTouchSlider = {
     const right = this.getRight(elem);
 
 		Math.abs(right) < (this.width / 2)
-      ? menuSlideIn(event) // elem.style.right = 0 + 'px'
-      : menuSlideOut(event) // elem.style.right = -this.width + 'px';
+      ? menuSlideIn(event)
+      : menuSlideOut(event)
 
 		this.startX = null;
 		this.startY = null;
@@ -79,12 +108,16 @@ const mobileMenuTouchSlider = {
 
 function menuSlideIn(event) {
   document.querySelector('.js-cover').classList.add('active');
-  document.querySelector('#js-nav-container').style.cssText = 'right: 0px; transition: right 0.5s;';
-  document.querySelector('body').style.overflow = 'hidden'; // Stop Scroll Propagation
+  document.querySelector('#js-nav-container').style.cssText =
+    `height: auto; right: 0px; transition: right ${menuTransition};`;
+  document.querySelector('body').classList.add('noscroll');
 }
 
 function menuSlideOut(event) {
+  const panelElWidth = document.querySelector('#js-nav-container .js-nav-box').clientWidth;
+
   document.querySelector('.js-cover').classList.remove('active');
-  document.querySelector('#js-nav-container').style.cssText = 'right: -250px; transition: right 0.5s;';
-  document.querySelector('body').style.overflow = 'auto';
+  document.querySelector('#js-nav-container').style.cssText =
+    `height: 100vh; right: ${-panelElWidth - 1}px; transition: right ${menuTransition};`;
+    document.querySelector('body').classList.remove('noscroll');
 }

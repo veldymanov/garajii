@@ -16,6 +16,20 @@
   font-weight: 500;
   src: url(../assets/fonts/Roboto-Bold.ttf); }
 
+* {
+  box-sizing: border-box; }
+
+.noscroll {
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%; }
+
+body {
+  margin: 0;
+  min-width: 350px; }
+
 .underline::after {
   background-color: #737373;
   content: "";
@@ -51,10 +65,12 @@
   font-family: 'Roboto';
   font-size: 14px;
   font-weight: 500;
+  height: 75px;
   left: 0;
   padding-left: 20px;
+  position: absolute;
   top: 0;
-  transition: background-color 0.4s, color 0.4s, top 0.4s;
+  transition: background-color 0.25s, color 0.25s, top 0.25s;
   width: 100%;
   z-index: 100; }
   .head-nav ul {
@@ -69,7 +85,8 @@
       width: 100%; }
   .head-nav .logo-link {
     align-self: center;
-    height: 50px; }
+    height: 100%;
+    padding: 10px 0; }
     .head-nav .logo-link .logo {
       display: block;
       filter: brightness(0) invert(1);
@@ -77,23 +94,28 @@
       transition: height 0.4s;
       width: auto; }
   .head-nav .nav-container {
-    display: flex;
     flex-grow: 1;
-    justify-content: space-between; }
-    .head-nav .nav-container .action-buttons {
-      color: #FFFFFF;
-      margin: 0;
-      padding: 0; }
-      .head-nav .nav-container .action-buttons .action-btn {
-        align-items: center;
-        display: flex;
-        margin-right: 10px; }
-        .head-nav .nav-container .action-buttons .action-btn:last-child {
-          margin-right: 0; }
-        .head-nav .nav-container .action-buttons .action-btn.download {
-          background-color: #F9A919;
-          color: #737373;
-          height: 100%; }
+    height: 100%; }
+    .head-nav .nav-container .nav-box {
+      display: flex;
+      height: 100%;
+      justify-content: space-between; }
+      .head-nav .nav-container .nav-box .action-buttons {
+        color: #FFFFFF;
+        flex-wrap: wrap;
+        height: 100%;
+        margin: 0;
+        padding: 0; }
+        .head-nav .nav-container .nav-box .action-buttons .action-btn {
+          align-items: center;
+          display: flex;
+          margin-right: 10px; }
+          .head-nav .nav-container .nav-box .action-buttons .action-btn:last-child {
+            margin-right: 0; }
+          .head-nav .nav-container .nav-box .action-buttons .action-btn.download {
+            background-color: #F9A919;
+            color: #737373;
+            height: 100%; }
   .head-nav .sandwich {
     align-self: center;
     display: none;
@@ -101,7 +123,7 @@
     .head-nav .sandwich:hover {
       cursor: pointer; }
     .head-nav .sandwich .line {
-      background-color: #737373;
+      background-color: #FFFFFF;
       height: 4px;
       margin-bottom: 5px;
       margin-left: 5px; }
@@ -110,61 +132,67 @@
       .head-nav .sandwich .line.center {
         margin-left: 0; }
 
-.head-nav.fixed {
+.head-nav.scrolled {
   background-color: rgba(58, 58, 58, 0.5);
   color: #FFFFFF;
+  top: 0;
   position: fixed; }
-  .head-nav.fixed .underline:after {
+  .head-nav.scrolled .underline:after {
     background-color: #FFFFFF; }
-  .head-nav.fixed .sandwich .line {
+  .head-nav.scrolled .sandwich .line {
     background-color: #FFFFFF; }
+
+.head-nav.hidden {
+  top: -75px; }
+
+@media (min-width: 900px) {
+  .head-nav .nav-container {
+    height: 100% !important; } }
 
 @media (max-width: 900px) {
   .head-nav {
-    padding: 20px; }
+    padding: 0 20px; }
+    .head-nav .logo-link {
+      padding: 10px 0; }
     .head-nav .nav-container {
-      align-items: flex-start;
-      background-color: #222222;
-      border-radius: 4px;
-      flex-direction: column;
-      min-height: 300px;
-      overflow: hidden;
-      position: absolute;
-      right: -250px;
-      top: 0;
-      width: 250px; }
-      .head-nav .nav-container .nav-items {
-        align-items: flex-start;
-        flex-direction: column;
-        margin-top: 0;
-        padding: 0;
-        width: 100%; }
-        .head-nav .nav-container .nav-items .nav-item {
-          width: 100%; }
-          .head-nav .nav-container .nav-items .nav-item:hover {
-            background-color: #3c3c3c; }
-          .head-nav .nav-container .nav-items .nav-item .nav-link {
-            padding: 20px 20px; }
-          .head-nav .nav-container .nav-items .nav-item .underline::after {
-            display: none; }
-      .head-nav .nav-container .action-buttons {
-        align-items: flex-start;
-        flex-direction: column;
-        width: 100%; }
-        .head-nav .nav-container .action-buttons .action-btn {
-          margin-right: 0;
-          width: 100%; }
-          .head-nav .nav-container .action-buttons .action-btn a {
-            padding: 20px 20px; }
+      background-color: transparent;
+      height: 100vh;
+      overflow: auto;
+      padding-left: 25px;
+      position: fixed;
+      right: calc(-250px - 1px);
+      top: 0; }
+      .head-nav .nav-container .nav-box {
+        background-color: #222222;
+        flex-wrap: wrap;
+        height: auto;
+        min-height: 300px;
+        width: 250px; }
+        .head-nav .nav-container .nav-box .nav-items {
+          flex: 1 0 100%;
+          flex-wrap: wrap;
+          height: 100%;
+          margin-top: 0;
+          padding: 0; }
+          .head-nav .nav-container .nav-box .nav-items .nav-item {
+            flex: 1 0 100%; }
+            .head-nav .nav-container .nav-box .nav-items .nav-item:hover {
+              background-color: #3c3c3c; }
+            .head-nav .nav-container .nav-box .nav-items .nav-item .nav-link {
+              padding: 20px 20px; }
+            .head-nav .nav-container .nav-box .nav-items .nav-item .underline::after {
+              display: none; }
+        .head-nav .nav-container .nav-box .action-buttons {
+          align-self: flex-end;
+          flex-wrap: wrap;
+          height: 100%; }
+          .head-nav .nav-container .nav-box .action-buttons .action-btn {
+            flex: 1 0 100%;
+            margin-right: 0; }
+            .head-nav .nav-container .nav-box .action-buttons .action-btn a {
+              padding: 20px 20px; }
     .head-nav .sandwich {
       display: block; } }
-
-* {
-  box-sizing: border-box; }
-
-body {
-  margin: 0;
-  min-width: 380px; }
 
 main .car-service {
   background: center/cover no-repeat url("../assets/images/shutterstock.png"), #000000;
