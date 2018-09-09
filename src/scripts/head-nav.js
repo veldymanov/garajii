@@ -1,4 +1,9 @@
-const menuTransition = '0.4s';
+const menuPanelState = {
+  body: document.querySelector('body'),
+  isOpen: false,
+  transition: '0.25s',
+  windowYOffset: 0,
+};
 
 document.addEventListener("DOMContentLoaded",function() {
   const headNavEl = document.querySelector('.js-head-nav');
@@ -7,6 +12,7 @@ document.addEventListener("DOMContentLoaded",function() {
 
   window.addEventListener('scroll', function(){
     const yOffset = window.pageYOffset;
+    if (menuPanelState.isOpen) { return; }
 
     if (yOffset <= 0) {
       headNavEl.classList.remove('scrolled', 'hidden')
@@ -26,7 +32,7 @@ document.addEventListener("DOMContentLoaded",function() {
   });
 
   window.addEventListener('resize', function(event){
-    if(window.innerWidth > 900 ) { menuSlideOut(event) }
+    if (menuPanelState.isOpen) { menuSlideOut(event); }
   });
 
   mobileMenuTouchSlider.createSlidePanel('#js-nav-container');
@@ -107,10 +113,17 @@ const mobileMenuTouchSlider = {
 }
 
 function menuSlideIn(event) {
+  menuPanelState.windowYOffset = window.pageYOffset;
+
   document.querySelector('.js-cover').classList.add('active');
   document.querySelector('#js-nav-container').style.cssText =
-    `height: auto; right: 0px; transition: right ${menuTransition};`;
-  document.querySelector('body').classList.add('noscroll');
+    `height: auto; right: 0px; transition: right ${menuPanelState.transition};`;
+
+  const bodyWidth = menuPanelState.body.offsetWidth;
+  menuPanelState.body.classList.add('noscroll');
+  menuPanelState.body.style.top = `${-menuPanelState.windowYOffset}px`;
+  menuPanelState.body.style.width = `${bodyWidth}px`;
+  menuPanelState.isOpen = true;
 }
 
 function menuSlideOut(event) {
@@ -118,6 +131,10 @@ function menuSlideOut(event) {
 
   document.querySelector('.js-cover').classList.remove('active');
   document.querySelector('#js-nav-container').style.cssText =
-    `height: 100vh; right: ${-panelElWidth - 1}px; transition: right ${menuTransition};`;
-    document.querySelector('body').classList.remove('noscroll');
+    `height: 100vh; right: ${-panelElWidth - 1}px; transition: right ${menuPanelState.transition};`;
+
+  menuPanelState.body.classList.remove('noscroll');
+  window.scrollTo(0, menuPanelState.windowYOffset);
+  menuPanelState.body.style.width = `auto`;
+  menuPanelState.isOpen = false;
 }
