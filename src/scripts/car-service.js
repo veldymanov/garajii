@@ -52,16 +52,26 @@ document.addEventListener("DOMContentLoaded", function() {
   function doSlide() {
     const photoHeight = photoWrapperEl.offsetHeight;
 
-    if(window.scrollY <= 2 * slideHeight) {
+    if(window.scrollY <=  0.5 * slideHeight) {
       photoListEl.style.cssText = `top: 0px`;
-    } else if(window.scrollY <=  2.8 * slideHeight) {
+    } else if(window.scrollY <=  1.5 * slideHeight) {
       photoListEl.style.cssText = `top: ${-photoHeight}px`;
-    } else if(window.scrollY <=  3.8 * slideHeight) {
+    } else if(window.scrollY <=  2.5 * slideHeight) {
       photoListEl.style.cssText = `top: ${-2 * photoHeight}px`;
-    } else if(window.scrollY <=  4.8 * slideHeight) {
+    } else if(window.scrollY <=  3.5 * slideHeight) {
       photoListEl.style.cssText = `top: ${-3 * photoHeight}px`;
-    } else if(window.scrollY <=  5.8 * slideHeight) {
+    } else if(window.scrollY <=  4.5 * slideHeight) {
       photoListEl.style.cssText = `top: ${-4 * photoHeight}px`;
+    } else if(window.scrollY <=  5.5 * slideHeight) {
+      photoListEl.style.cssText = `top: ${-5 * photoHeight}px`;
+    } else if(window.scrollY <=  6.5 * slideHeight) {
+      photoListEl.style.cssText = `top: ${-6 * photoHeight}px`;
+    } else if(window.scrollY <=  7.5 * slideHeight) {
+      photoListEl.style.cssText = `top: ${-7 * photoHeight}px`;
+    } else if(window.scrollY <=  8.5 * slideHeight) {
+      photoListEl.style.cssText = `top: ${-8 * photoHeight}px`;
+    } else if(window.scrollY <=  9.5 * slideHeight) {
+      photoListEl.style.cssText = `top: ${-9 * photoHeight}px`;
     }
   }
 });

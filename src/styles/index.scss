@@ -8,3 +8,34 @@ main {
   }
 }
 
+.chat {
+  bottom: 0;
+  position: fixed;
+  right: 0;
+  z-index: 100;
+
+  & > a {
+    display: block;
+    color: currentColor;
+    margin: 0 20px 20px 0;
+    text-decoration: none;
+    width: 40px;
+
+    img {
+      display: block;
+      filter: contrast(80%);
+      width: 100%;
+    }
+  }
+}
+
+@media (max-width: $media-mob-view) {
+  .chat {
+    & > a {
+      margin: 0 10px 10px 0;
+      width: 30px;
+    }
+  }
+}
+
+

@@ -8,6 +8,8 @@ section.car-service {
     .slide {
       display: flex;
       height: calc(100vw / 1.78);
+      max-height: 100vh;
+      position: relative;
       overflow: hidden;
 
       & > div {
@@ -22,10 +24,31 @@ section.car-service {
           width: auto;
 
           p {
+            color: $color-gray;
             font-size: 20px;
           }
           &.mob-view {
             background-color: transparent !important;
+          }
+        }
+      }
+
+      .slide-footer {
+        bottom: 0;
+        display: flex;
+        padding: 30px 6vw;
+        position: absolute;
+
+        & > a {
+          display: block;
+          color: currentColor;
+          margin-right: 30px;
+          text-decoration: none;
+          width: 175px;
+
+          img {
+            display: block;
+            width: 100%;
           }
         }
       }
@@ -45,20 +68,23 @@ section.car-service {
 .iphone-wrapper {
   height: calc(#{$iphone-warpper-width} * 979 / 493);
   left: 50%;
+  max-height: 80vh;
+  max-width: calc(80vh * 493 / 979);
   overflow: hidden;
   position: absolute;
   top: 50%;
-  transform: translate(-50%, -45%);
+  transform: translate(-50%, -50%);
   width: $iphone-warpper-width;
 
   .photo-list-wrapper {
     background-color: $gray-1200;
-    border-radius: 45px;
-    height: calc(100% - 1px);
+    border-radius: 50px;
+    height: calc(100% - 4px);
     left: 50%;
     overflow: hidden;
     position: absolute;
-    transform: translateX(-50%);
+    top: 50%;
+    transform: translate(-50%, -50%);
     width: calc(100% - 6px);
 
     .photo-list {
@@ -99,8 +125,8 @@ section.car-service {
     position: relative;
 
     .info-wrapper {
-      color: $color-gray;
-      padding: 0 12.5%;
+      color: $gray-1100;
+      padding: 0 6vw;
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
@@ -114,7 +140,7 @@ section.car-service {
       }
 
       h2  {
-        font-size: 90px;
+        font-size: 80px;
         font-weight: 500;
         line-height: 1em;
         margin: 0;
@@ -135,17 +161,42 @@ section.car-service {
         text-decoration: none;
         width: 200px;
       }
+
+      ul {
+        padding: 0 0 0 60px;
+        list-style-type: none;
+
+        li {
+          padding: 20px 0;
+          position: relative;
+
+          &::before {
+            background-color: $gray-210;
+            border-radius: 50%;
+            content: "";
+            height: 30px;
+            left: -60px;
+            top: 22px;
+            position: absolute;
+            width: 30px;
+          }
+
+          & > div {
+            line-height: 2em;
+          }
+        }
+      }
     }
   }
 
   .mob-view {
     background-color: $gray-1200;
     // border-bottom: 1px solid $color-gray;
-  }
-}
 
-.mob-view {
-  display: none;
+    .iphone-wrapper {
+      display: none;
+    }
+  }
 }
 
 @media (max-width: 1280px) {
@@ -157,7 +208,15 @@ section.car-service {
           width: 530px;
         }
         h2 {
-          font-size: 80px;
+          font-size: 60px;
+        }
+        ul {
+          li {
+            padding: 10px 0;
+            &::before {
+              top: 12px;
+            }
+          }
         }
       }
     }
@@ -165,82 +224,105 @@ section.car-service {
 }
 
 @media (max-width: 1020px) {
-  .slide{
-    .info {
-      .info-wrapper {
-        padding: 0 6%;
+  section.car-service {
+    .slides {
+      .slide {
+        .info {
+          .info-wrapper {
+            padding-left: 3vw;
+            padding-right: 3vw;
 
-        h1 {
-          font-size: 60px;
-          width: 430px;
+            h1 {
+              font-size: 60px;
+              width: 430px;
+            }
+            h2 {
+              font-size: 42px;
+            }
+            p {
+              font-size: 20px;
+            }
+            ul {
+              margin: 0;
+              padding-left: 40px;
+
+              li {
+                font-size: 16px;
+                line-height: 1.5em;
+                padding: 3px 0;
+
+                &::before {
+                  left: -40px;
+                  height: 20px;
+                  width: 20px;
+                  top: 11px;
+                }
+              }
+            }
+          }
         }
-        h2 {
-          font-size: 42px;
+
+        .slide-footer {
+          padding: 20px 3vw;
+
+          & > a {
+            width: 125px;
+          }
         }
       }
     }
   }
 
-  $iphone-warpper-width: 18vw;
 
   .iphone-wrapper {
-    height: calc(#{$iphone-warpper-width} * 979 / 493);
-    width: $iphone-warpper-width;
-
     .photo-list-wrapper {
       border-radius: 30px;
-
-      .photo-list {
-        .photo-wrapper {
-          height: calc(#{$iphone-warpper-width} * 979 / 493);
-        }
-      }
     }
   }
 }
 
 @media (max-width: $media-mob-view) {
-  main {
-    .car-service {
-      .slides {
-        .slide {
-          flex-wrap: wrap;
-          height: auto;
 
-          &.first-slide {
-            background: center / cover no-repeat url("../assets/images/shutterstock-mobile.png");
+  section.car-service {
+    .slides {
+      .slide {
+        flex-wrap: wrap;
+        height: auto;
+        max-height: none;
+
+        .info {
+          .info-wrapper {
+            position: relative;
+            padding: 10% 8%;
+
+            h1 {
+              font-size: 48px;
+              width: auto;
+            }
+            h2 {
+              font-size: 48px;
+              width: auto;
+            }
           }
+        }
 
-          & > div {
-            flex: 0 0 100% !important;
+        &.first-slide {
+          background: center / cover no-repeat url("../assets/images/shutterstock-mobile.png");
+
+          .info {
+            .info-wrapper {
+              padding-top: 120px;
+              padding-bottom: 30px;
+            }
           }
         }
-      }
-    }
-  }
 
-  .slide {
-    .info {
-      .info-wrapper {
-        position: relative;
-        padding: 10% 8%;
-
-        h1 {
-          font-size: 48px;
-          width: auto;
+        & > div {
+          flex: 0 0 100% !important;
         }
-        h2 {
-          font-size: 48px;
-          width: auto;
-        }
-      }
-    }
 
-    &.first-slide {
-      .info {
-        .info-wrapper {
-          padding-top: 120px;
-          padding-bottom: 80px;
+        .slide-footer {
+          display: none;
         }
       }
     }
@@ -248,9 +330,13 @@ section.car-service {
 
   $iphone-warpper-width: 75vw;
   .mob-view {
-    display: block;
     position: relative;
     height: calc(#{$iphone-warpper-width} * 979 / 493 + 100px);
+    max-height: calc(80vh + 100px);
+
+    .iphone-wrapper {
+      display: block !important;
+    }
   }
 
   aside.iphone-slider {
@@ -259,14 +345,12 @@ section.car-service {
 
   .iphone-wrapper {
     height: calc(#{$iphone-warpper-width} * 979 / 493);
-    transform: translate(-50%, -50%);
     width: $iphone-warpper-width;
 
     .photo-list-wrapper {
-      border-radius: 75px;
+      border-radius: 70px;
 
       .photo-list {
-
         .photo-wrapper {
           padding: $iphone-warpper-width * 0.05;
         }
