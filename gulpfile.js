@@ -2,7 +2,6 @@ const gulp = require('gulp');
 const  plumber = require('gulp-plumber');
 const  autoprefixer = require('gulp-autoprefixer');
 const  rename = require('gulp-rename');
-
 const  urlAdjuster = require('gulp-css-url-adjuster');
 const  inline = require('gulp-inline');
 const  htmlmin = require('gulp-htmlmin');
@@ -12,9 +11,10 @@ const  babel = require('gulp-babel');
 const  uglify = require('gulp-uglify');
 const  webp = require('gulp-webp');
 const  imagemin = require('gulp-imagemin');
-
 const  browserSync = require('browser-sync');
 const  del = require('del');
+
+const distFolder = 'doc'; // 'doc', 'public/dist'
 
 
 /**
@@ -72,51 +72,51 @@ gulp.task('pic', ['pic:remove']);
 */
 //clear out all files and folders from build folder
 gulp.task('build:cleanfolder', () =>
-  del.sync('dist/**')
+  del.sync(`${distFolder}/**`)
 );
 
 //task to create build directory for all files
 gulp.task('build:copy', ['build:cleanfolder'], () =>
   gulp.src('src/**/*/')
-    .pipe(gulp.dest('dist/'))
+    .pipe(gulp.dest(`${distFolder}/`))
 );
 
 // change urls in css files
 gulp.task('url:adjust', ['build:copy'], () =>
-  gulp.src('dist/styles/*.css')
+  gulp.src(`${distFolder}/styles/*.css`)
     .pipe(urlAdjuster({
       replace:  ['../',''], // for github pages: "replace:  ['../','']"
     }))
-    .pipe(gulp.dest('dist/styles/'))
+    .pipe(gulp.dest(`${distFolder}/styles/`))
 );
 
 //minify scripts
 gulp.task('scripts:minify', ['url:adjust'], () =>
-  gulp.src(['dist/**/*.js', '!dist/**/chat-socket.js'])
+  gulp.src([`${distFolder}/**/*.js`, `!${distFolder}/**/chat-socket.js`])
   .pipe(plumber())
   .pipe(babel({
     presets: ['@babel/env']
   }))
   .pipe(uglify())
-  .pipe(gulp.dest('dist/'))
+  .pipe(gulp.dest(`${distFolder}/`))
 );
 
 // inline css, js, svg
 gulp.task('inline', ['scripts:minify'], () =>
-  gulp.src('dist/*.html')
+  gulp.src(`${distFolder}/*.html`)
   .pipe(inline({
-    base: 'dist',
+    base: `${distFolder}`,
     // js: uglify,
     css: [cleanCSS],
     disabledTypes: ['img', 'svg'], // Only inline css, js files
     // ignore: ['./css/do-not-inline-me.css']
   }))
-  .pipe(gulp.dest('dist/'))
+  .pipe(gulp.dest(`${distFolder}/`))
 );
 
 //minify html
 gulp.task('html:minify', ['inline'], () =>
-  gulp.src(['dist/**/*.html'])
+  gulp.src([`${distFolder}/**/*.html`])
   .pipe(plumber())
   .pipe(htmlmin({
     collapseBooleanAttributes: true,
@@ -133,13 +133,14 @@ gulp.task('html:minify', ['inline'], () =>
     removeRedundantAttributes: true,
     removeScriptTypeAttributes: true
   }))
-  .pipe(gulp.dest('dist/'))
+  .pipe(gulp.dest(`${distFolder}/`))
 );
 
 //task to remove unwanted build files
 gulp.task('build:remove', ['html:minify'], () =>
   del.sync([
-    'dist/styles/**', 'dist/scripts/**'])
+    `${distFolder}/styles/**`, `${distFolder}/scripts/**`
+  ])
 );
 
 gulp.task('build', ['build:remove']);
@@ -159,7 +160,7 @@ gulp.task('serve', () =>
 gulp.task('build:serve', () =>
   browserSync({
     server: {
-      baseDir: './dist/'
+      baseDir: `./${distFolder}/`
     }
   })
 );
