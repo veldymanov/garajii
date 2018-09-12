@@ -1,12 +1,23 @@
+$media-mob-view: 767px;
+
+
+/**
+*   Colors
+*/
 $error-color: #E61610;
 $warning-color: #FF8351;
 
-$gray-1200: #222222;
-$gray-700: #737373;
+$gray-1200:  #222222; // rgb(34, 34, 34)
+$gray-700: #737373; // rgb(115,115,115)
 $gray-300: #bbbbbb;
 
-$color-black: #000000;
+$color-black:#000000; // rgb(0, 0, 0)
+$color-blue: #10466E;
+$color-gray: #707070;
+$color-green: #00452C;
 $color-orange: #F9A919;
+$color-red: #E65027;
 $color-white: #FFFFFF;
 
 $scrolled-panel-bc: rgba(58, 58, 58, 0.5);
+

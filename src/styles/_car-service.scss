@@ -1,0 +1,277 @@
+@import 'variables';
+
+$iphone-warpper-width: 20vw;
+
+
+section.car-service {
+  .slides {
+    .slide {
+      display: flex;
+      height: calc(100vw / 1.78);
+      overflow: hidden;
+
+      & > div {
+        flex: 0 0 50%;
+        width: 50%;
+      }
+
+      &.first-slide {
+        background: linear-gradient(rgba(34, 34, 34, 0), rgba(34, 34, 34, 0)), center / cover no-repeat url("../assets/images/shutterstock.png") $color-black;
+        & > div {
+          flex: 0 0 60%;
+          width: auto;
+
+          p {
+            font-size: 20px;
+          }
+          &.mob-view {
+            background-color: transparent !important;
+          }
+        }
+      }
+    }
+  }
+
+  aside.iphone-slider {
+    height: calc(100vw / 1.78);
+    max-height: 100%;
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 50%;
+  }
+}
+
+.iphone-wrapper {
+  height: calc(#{$iphone-warpper-width} * 979 / 493);
+  left: 50%;
+  overflow: hidden;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -45%);
+  width: $iphone-warpper-width;
+
+  .photo-list-wrapper {
+    background-color: $gray-1200;
+    border-radius: 45px;
+    height: calc(100% - 1px);
+    left: 50%;
+    overflow: hidden;
+    position: absolute;
+    transform: translateX(-50%);
+    width: calc(100% - 6px);
+
+    .photo-list {
+      display: flex;
+      flex-wrap: wrap;
+      height: 100%;
+      left: 0;
+      position: absolute;
+      top: 0;
+      transition: top 1s ease-in-out;
+      width: 100%;
+
+      .photo-wrapper {
+        flex: 0 0 100%;
+        height: calc(#{$iphone-warpper-width} * 979 / 493);
+        padding: $iphone-warpper-width * 0.05;
+        width: 100%;
+
+        img {
+          width: 100%;
+        }
+      }
+    }
+  }
+
+  img.iphone-view {
+    display: block;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 1;
+  }
+}
+
+.slide {
+  .info {
+    position: relative;
+
+    .info-wrapper {
+      color: $color-gray;
+      padding: 0 12.5%;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+
+      h1  {
+        font-size: 100px;
+        font-weight: 500;
+        line-height: 1em;
+        margin: 0;
+        width: 680px;
+      }
+
+      h2  {
+        font-size: 90px;
+        font-weight: 500;
+        line-height: 1em;
+        margin: 0;
+      }
+
+      p {
+        font-size: 24px;
+        font-weight: 300;
+      }
+
+      a.download-btn {
+        background-color: $color-orange;
+        cursor: pointer;
+        display: block;
+        color: currentColor;
+        font-weight: 300;
+        padding: 15px;
+        text-decoration: none;
+        width: 200px;
+      }
+    }
+  }
+
+  .mob-view {
+    background-color: $gray-1200;
+    // border-bottom: 1px solid $color-gray;
+  }
+}
+
+.mob-view {
+  display: none;
+}
+
+@media (max-width: 1280px) {
+  .slide{
+    .info {
+      .info-wrapper {
+        h1 {
+          font-size: 80px;
+          width: 530px;
+        }
+        h2 {
+          font-size: 80px;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 1020px) {
+  .slide{
+    .info {
+      .info-wrapper {
+        padding: 0 6%;
+
+        h1 {
+          font-size: 60px;
+          width: 430px;
+        }
+        h2 {
+          font-size: 42px;
+        }
+      }
+    }
+  }
+
+  $iphone-warpper-width: 18vw;
+
+  .iphone-wrapper {
+    height: calc(#{$iphone-warpper-width} * 979 / 493);
+    width: $iphone-warpper-width;
+
+    .photo-list-wrapper {
+      border-radius: 30px;
+
+      .photo-list {
+        .photo-wrapper {
+          height: calc(#{$iphone-warpper-width} * 979 / 493);
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: $media-mob-view) {
+  main {
+    .car-service {
+      .slides {
+        .slide {
+          flex-wrap: wrap;
+          height: auto;
+
+          &.first-slide {
+            background: center / cover no-repeat url("../assets/images/shutterstock-mobile.png");
+          }
+
+          & > div {
+            flex: 0 0 100% !important;
+          }
+        }
+      }
+    }
+  }
+
+  .slide {
+    .info {
+      .info-wrapper {
+        position: relative;
+        padding: 10% 8%;
+
+        h1 {
+          font-size: 48px;
+          width: auto;
+        }
+        h2 {
+          font-size: 48px;
+          width: auto;
+        }
+      }
+    }
+
+    &.first-slide {
+      .info {
+        .info-wrapper {
+          padding-top: 120px;
+          padding-bottom: 80px;
+        }
+      }
+    }
+  }
+
+  $iphone-warpper-width: 75vw;
+  .mob-view {
+    display: block;
+    position: relative;
+    height: calc(#{$iphone-warpper-width} * 979 / 493 + 100px);
+  }
+
+  aside.iphone-slider {
+    display: none;
+  }
+
+  .iphone-wrapper {
+    height: calc(#{$iphone-warpper-width} * 979 / 493);
+    transform: translate(-50%, -50%);
+    width: $iphone-warpper-width;
+
+    .photo-list-wrapper {
+      border-radius: 75px;
+
+      .photo-list {
+
+        .photo-wrapper {
+          padding: $iphone-warpper-width * 0.05;
+        }
+      }
+    }
+  }
+
+}

@@ -1,3 +1,5 @@
+@import "variables";
+
 * {
   box-sizing: border-box;
 }
@@ -11,6 +13,15 @@
 }
 
 body {
+  font-family: 'Roboto';
   margin: 0;
   min-width: 350px;
 }
+
+.black { color: $color-black; }
+.blue { color: $color-blue; }
+.gray { color: $color-gray; }
+.green { color: $color-green; }
+.orange{ color: $color-orange; }
+.red { color: $color-red; }
+.white { color: $color-white; }

@@ -42,7 +42,6 @@ $nav-box-min-height: 300px;
   color: $gray-700;
   display: flex;
   justify-content: space-between;
-  font-family: 'Roboto';
   font-size: 14px;
   font-weight: 500;
   height: $head-nav-height;
@@ -165,7 +164,7 @@ $nav-box-min-height: 300px;
   }
 }
 
-@media (min-width: 900px) {
+@media (min-width: $media-mob-view) {
   .head-nav {
     .nav-container {
       height: 100% !important;
@@ -173,7 +172,7 @@ $nav-box-min-height: 300px;
   }
 }
 
-@media (max-width: 900px) {
+@media (max-width: $media-mob-view) {
   .head-nav {
     padding: 0 20px;
 
@@ -190,6 +189,11 @@ $nav-box-min-height: 300px;
       position: fixed;
       right: calc(#{-$nav-box-width} - 1px);
       top: 0;
+
+      &::-webkit-scrollbar {
+        -webkit-appearance: none;
+        width: 0px;
+      }
 
       .nav-box {
         background-color: $gray-1200;
