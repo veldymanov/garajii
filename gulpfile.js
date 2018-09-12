@@ -14,7 +14,7 @@ const  imagemin = require('gulp-imagemin');
 const  browserSync = require('browser-sync');
 const  del = require('del');
 
-const distFolder = 'doc'; // 'doc', 'public/dist'
+const distFolder = 'docs'; // 'docs', 'public/dist'
 
 
 /**
