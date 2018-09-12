@@ -1,12 +1,84 @@
 @import 'fonts', 'variables', 'head-nav', 'car-service', 'footer';
 
 
-main {
+.logo {
+  background:  left / 16.9% 75% repeat-x url("../assets/images/logo-icon-dark.svg") $gray-010;
+  height: calc(100vw * 280 / 1920 );
 
-  .car-service {
+}
 
+.benefits {
+  background:  $gray-1200;
+  color: $color-white;
+  padding: 6vw;
+
+  h2 {
+    border-bottom: 1px solid $color-gray;
+    font-size: 40px;
+    padding-bottom: 10px;
+  }
+  .benefits-box {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-bottom: -20px;
+
+    .benefit {
+      background: $gray-1190;
+      flex: 0 0 32%;
+      height: calc((100vw - 2*6vw) * 0.32 * 280 / 455);
+      margin-bottom: 20px;
+      position: relative;
+      width: 32%;
+
+      img {
+        display: block;
+        left: 50%;
+        position: absolute;
+        top: 40%;
+        transform: translate(-50%, -50%);
+        width: 20%;
+
+        &.over {
+          top: 30%;
+        }
+        &.under {
+          top: 50%;
+        }
+      }
+
+      p {
+        bottom: 10%;
+        font-size: 24px;
+        font-weight: 300;
+        left: 50%;
+        margin: 0;
+        position: absolute;
+        transform: translateX(-50%);
+        width: fit-content;
+
+        &.text {
+          bottom: auto;
+          font-size: 18px;
+          padding: 5%;
+          text-align: center;
+          top: 50%;
+          transform: translate(-50%, -50%);
+        }
+      }
+    }
   }
 }
+
+.customer-reviews {
+  background:  $gray-1200;
+
+
+  img {
+    width: 100px;
+  }
+}
+
 
 .chat {
   bottom: 0;
@@ -29,7 +101,33 @@ main {
   }
 }
 
+@media (max-width: 1280px) {
+
+}
+
+@media (max-width: 1020px) {
+  .benefits {
+    .benefits-box {
+      .benefit {
+        flex: 0 0 48.5%;
+        height: calc((100vw - 2*6vw) * 0.485 * 280 / 455);
+        width: 48.5%;
+      }
+    }
+  }
+}
+
 @media (max-width: $media-mob-view) {
+  .benefits {
+    .benefits-box {
+      .benefit {
+        flex: 0 0 100%;
+        height: calc((100vw - 2*6vw) * 1 * 280 / 455);
+        width: 100%;
+      }
+    }
+  }
+
   .chat {
     & > a {
       margin: 0 10px 10px 0;

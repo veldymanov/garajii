@@ -116,9 +116,8 @@ body {
     align-self: center;
     height: 100%;
     padding: 10px 0; }
-    .head-nav .logo-link .logo {
+    .head-nav .logo-link img {
       display: block;
-      filter: brightness(0) invert(1);
       height: 100%;
       transition: height 0.4s;
       width: auto; }
@@ -404,7 +403,7 @@ section.car-service aside.iphone-slider {
           left: -40px;
           height: 20px;
           width: 20px;
-          top: 11px; }
+          top: 8px; }
   section.car-service .slides .slide .slide-footer {
     padding: 20px 3vw; }
     section.car-service .slides .slide .slide-footer > a {
@@ -454,6 +453,63 @@ section.car-service aside.iphone-slider {
 footer {
   height: 1000px; }
 
+.logo {
+  background: left/16.9% 75% repeat-x url("../assets/images/logo-icon-dark.svg") #F5F5F5;
+  height: calc(100vw * 280 / 1920); }
+
+.benefits {
+  background: #222222;
+  color: #FFFFFF;
+  padding: 6vw; }
+  .benefits h2 {
+    border-bottom: 1px solid #707070;
+    font-size: 40px;
+    padding-bottom: 10px; }
+  .benefits .benefits-box {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-bottom: -20px; }
+    .benefits .benefits-box .benefit {
+      background: #2A2A2A;
+      flex: 0 0 32%;
+      height: calc((100vw - 2*6vw) * 0.32 * 280 / 455);
+      margin-bottom: 20px;
+      position: relative;
+      width: 32%; }
+      .benefits .benefits-box .benefit img {
+        display: block;
+        left: 50%;
+        position: absolute;
+        top: 40%;
+        transform: translate(-50%, -50%);
+        width: 20%; }
+        .benefits .benefits-box .benefit img.over {
+          top: 30%; }
+        .benefits .benefits-box .benefit img.under {
+          top: 50%; }
+      .benefits .benefits-box .benefit p {
+        bottom: 10%;
+        font-size: 24px;
+        font-weight: 300;
+        left: 50%;
+        margin: 0;
+        position: absolute;
+        transform: translateX(-50%);
+        width: fit-content; }
+        .benefits .benefits-box .benefit p.text {
+          bottom: auto;
+          font-size: 18px;
+          padding: 5%;
+          text-align: center;
+          top: 50%;
+          transform: translate(-50%, -50%); }
+
+.customer-reviews {
+  background: #222222; }
+  .customer-reviews img {
+    width: 100px; }
+
 .chat {
   bottom: 0;
   position: fixed;
@@ -470,7 +526,17 @@ footer {
       filter: contrast(80%);
       width: 100%; }
 
+@media (max-width: 1020px) {
+  .benefits .benefits-box .benefit {
+    flex: 0 0 48.5%;
+    height: calc((100vw - 2*6vw) * 0.485 * 280 / 455);
+    width: 48.5%; } }
+
 @media (max-width: 767px) {
+  .benefits .benefits-box .benefit {
+    flex: 0 0 100%;
+    height: calc((100vw - 2*6vw) * 1 * 280 / 455);
+    width: 100%; }
   .chat > a {
     margin: 0 10px 10px 0;
     width: 30px; } }

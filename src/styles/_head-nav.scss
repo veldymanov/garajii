@@ -74,9 +74,8 @@ $nav-box-min-height: 300px;
     height: 100%;
     padding: 10px 0;
 
-    .logo {
+    img {
       display: block;
-      filter: brightness(0) invert(1);
       height: 100%;
       transition: height 0.4s;
       width: auto;
