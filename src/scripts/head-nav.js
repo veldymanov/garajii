@@ -8,38 +8,45 @@ document.addEventListener("DOMContentLoaded", function() {
     isOpen: false,
     transition: '0.25s',
     windowScrollY: 0,
+    windowInnerWidth: window.innerWidth,
     menuSlideIn: function(event) {
-      if (!this.isOpen) {
-        this.windowScrollY = window.scrollY;
-        this.coverEl.classList.add('active');
-        this.navContainerEl.style.cssText = `height: auto; right: 0px; transition: right ${this.transition};`;
+      this.windowScrollY = this.isOpen ? this.windowScrollY : window.scrollY;
+      console.log('slideIn before',  this.windowScrollY);
 
-        const bodyWidth = this.bodyEl.offsetWidth;
-        this.bodyEl.classList.add('noscroll');
-        this.bodyEl.style.top = `${-this.windowScrollY}px`;
-        this.bodyEl.style.width = `${bodyWidth}px`;
-        this.isOpen = true;
-      }
+      this.coverEl.classList.add('active');
+      this.navContainerEl.style.cssText = `height: auto; right: 0px; transition: right ${this.transition};`;
+
+      const bodyWidth = this.bodyEl.offsetWidth;
+      this.bodyEl.classList.add('noscroll');
+      this.bodyEl.style.top = `${-this.windowScrollY}px`;
+      this.bodyEl.style.width = `${bodyWidth}px`;
+      this.isOpen = true;
+
+      window.scrollTo(0, this.windowScrollY);
+      console.log('slideIn after', this.windowScrollY);
     },
     menuSlideOut: function(event) {
-      if (this.isOpen) {
-        const panelElWidth = this.navBoxEl.clientWidth;
-        this.coverEl.classList.remove('active');
-        this.navContainerEl.style.cssText =
-          `height: 100vh; right: ${-panelElWidth - 1}px; transition: right ${this.transition};`;
+      const panelElWidth = this.navBoxEl.clientWidth;
+      this.windowScrollY = this.isOpen ? this.windowScrollY : window.scrollY;
+      console.log('slideOut before', this.windowScrollY);
 
-        this.bodyEl.classList.remove('noscroll');
-        window.scrollTo(0, mobileMenu.windowScrollY);
-        this.bodyEl.style.width = `auto`;
-        this.isOpen = false;
-      }
+      this.coverEl.classList.remove('active');
+      this.navContainerEl.style.cssText =
+        `height: 100vh; right: ${-panelElWidth - 1}px; transition: right ${this.transition};`;
+
+      this.bodyEl.classList.remove('noscroll');
+      window.scrollTo(0, this.windowScrollY);
+      this.bodyEl.style.width = `auto`;
+      this.isOpen = false;
+
+      console.log('slideOut after', this.windowScrollY);
     },
   }
 
   const mobileMenuTouchSlider = {
     log: function(msg) {
-      // var p = document.getElementById('log');
-      // p.innerHTML = p.innerHTML + "<br>" + msg;
+      var p = document.getElementById('log');
+      p.innerHTML = p.innerHTML + "<br>" + msg;
     },
 
     createSlidePanel: function(/*selector*/ panelId) {
@@ -60,7 +67,7 @@ document.addEventListener("DOMContentLoaded", function() {
       this.slider = 0; // Starting position
       this.startRight = this.getRight(elem);
 
-      // this.log("startRight: " + this.startRight);
+      // this.log("startRight: " + parseInt(this.startRight, 10));
     },
 
     touchMove: function(elem, event) {
@@ -87,7 +94,8 @@ document.addEventListener("DOMContentLoaded", function() {
     },
 
     getRight: function(elem) {
-      return parseInt(elem.style.right, 10);
+      const elemStyles = window.getComputedStyle(elem);
+      return parseInt(elemStyles.getPropertyValue('right'), 10);
     },
 
     doSlide: function(elem, event) {
@@ -95,7 +103,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
       Math.abs(right) < (this.width / 2)
         ? mobileMenu.menuSlideIn(event)
-        : mobileMenu.menuSlideOut(event)
+        : mobileMenu.menuSlideOut(event);
 
       this.startX = null;
       this.startY = null;
@@ -132,7 +140,11 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
     window.addEventListener('resize', function(event){
-      if (mobileMenu.isOpen) { mobileMenu.menuSlideOut(event); }
+      if (mobileMenu.isOpen && (mobileMenu.windowInnerWidth !== window.innerWidth)) {
+        mobileMenu.menuSlideOut(event);
+      }
+
+      mobileMenu.windowInnerWidth = window.innerWidth;
     });
 
     document.querySelector('.js-sandwich').addEventListener('click', function(event) {
