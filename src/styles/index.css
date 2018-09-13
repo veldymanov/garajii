@@ -447,6 +447,53 @@ section.car-service aside.iphone-slider {
       .iphone-wrapper .photo-list-wrapper .photo-list .photo-wrapper {
         padding: 3.75vw; } }
 
+/**
+*   Colors
+*/
+div.touch-panel {
+  margin-right: 30px; }
+  div.touch-panel div.touch-box {
+    height: 442px; }
+
+li.touch-list-item {
+  border-radius: 30px;
+  box-shadow: 0 10px 24px 0 rgba(0, 0, 0, 0.1);
+  height: 442px;
+  overflow: hidden;
+  transition: box-shadow .5s;
+  width: 366px; }
+  li.touch-list-item:hover {
+    box-shadow: 0 10px 24px 0 rgba(0, 0, 0, 0.25); }
+
+svg.js-next, svg.js-prev {
+  height: 40px;
+  top: 30%;
+  width: 25px; }
+  svg.js-next path, svg.js-prev path {
+    fill: transparent;
+    stroke: rgba(67, 67, 67, 0.2);
+    stroke-width: 15; }
+  svg.js-next.is-active path, svg.js-prev.is-active path {
+    stroke: rgba(67, 67, 67, 0.7); }
+
+svg.js-next {
+  left: 0px; }
+
+svg.js-prev {
+  right: -0px;
+  transform: rotate(180deg); }
+
+div.js-touch-panel {
+  position: relative; }
+  div.js-touch-panel div.js-touch-box svg.js-prev, div.js-touch-panel div.js-touch-box svg.js-next {
+    cursor: pointer;
+    position: absolute; }
+  div.js-touch-panel div.js-touch-box ul.js-touch-list {
+    height: 100%; }
+    div.js-touch-panel div.js-touch-box ul.js-touch-list li.js-touch-list-item img {
+      -moz-user-select: none;
+      user-select: none; }
+
 footer {
   height: 1000px; }
 
@@ -503,9 +550,14 @@ footer {
           transform: translate(-50%, -50%); }
 
 .customer-reviews {
-  background: #222222; }
-  .customer-reviews img {
-    width: 100px; }
+  background: #F5F5F5;
+  color: #222222;
+  padding: 6vw 0 6vw 6vw; }
+  .customer-reviews h2 {
+    border-bottom: 1px solid #222222;
+    font-size: 40px;
+    margin-right: 6vw;
+    padding-bottom: 10px; }
 
 .chat {
   bottom: 0;
