@@ -1,7 +1,7 @@
 @import 'variables', 'general-styles';
 
 $head-nav-height: 60px;
-$nav-container-padding-left: 20px;
+$nav-container-padding-left: 30px;
 $nav-box-width: 250px;
 $nav-box-min-height: 300px;
 
@@ -173,7 +173,7 @@ $nav-box-min-height: 300px;
 
 @media (max-width: $media-mob-view) {
   .head-nav {
-    padding: 0 20px;
+    padding: 0 30px;
 
     .logo-link {
       padding: 10px 0;

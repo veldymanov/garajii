@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function() {
   const photoListEl = document.querySelector('.js-photo-list');
   const photoWrapperEl = document.querySelector('.js-photo-wrapper');
   const slidesQuantity = document.querySelectorAll('.js-slide').length;
-  const mobViewWidth = 767;
+  const mobViewWidth = 780;
 
   let slideHeight = 0;
 

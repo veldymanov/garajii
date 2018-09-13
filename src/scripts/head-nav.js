@@ -11,8 +11,6 @@ document.addEventListener("DOMContentLoaded", function() {
     windowInnerWidth: window.innerWidth,
     menuSlideIn: function(event) {
       this.windowScrollY = this.isOpen ? this.windowScrollY : window.scrollY;
-      console.log('slideIn before',  this.windowScrollY);
-
       this.coverEl.classList.add('active');
       this.navContainerEl.style.cssText = `height: auto; right: 0px; transition: right ${this.transition};`;
 
@@ -23,13 +21,10 @@ document.addEventListener("DOMContentLoaded", function() {
       this.isOpen = true;
 
       window.scrollTo(0, this.windowScrollY);
-      console.log('slideIn after', this.windowScrollY);
     },
     menuSlideOut: function(event) {
       const panelElWidth = this.navBoxEl.clientWidth;
       this.windowScrollY = this.isOpen ? this.windowScrollY : window.scrollY;
-      console.log('slideOut before', this.windowScrollY);
-
       this.coverEl.classList.remove('active');
       this.navContainerEl.style.cssText =
         `height: 100vh; right: ${-panelElWidth - 1}px; transition: right ${this.transition};`;
@@ -38,8 +33,6 @@ document.addEventListener("DOMContentLoaded", function() {
       window.scrollTo(0, this.windowScrollY);
       this.bodyEl.style.width = `auto`;
       this.isOpen = false;
-
-      console.log('slideOut after', this.windowScrollY);
     },
   }
 
